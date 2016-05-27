@@ -1,0 +1,161 @@
+body, html {
+	height: 100vh;
+	width: 100vw;
+	min-height: 100vh;
+	margin: 0;
+	padding: 0;
+	font-size: 18px;
+	font-family: 'Arial', sans-serif;
+	overflow: hidden;
+}
+
+.content-wrapper {
+	background-image: url('../imgs/background.jpg');
+	background-size: cover;
+	display: flex;
+	flex-direction: row;
+	padding: 0 30px;
+	justify-content: space-around;
+}
+
+.logo-wrapper {
+	width: 45vw;
+}
+
+.logo-area {
+	background-color: rgba(255, 255, 255, 0.8);
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	align-items: center;
+}
+
+.logo-area img {
+	width: 600px;
+}
+
+.logo-area .subtitle {
+	font-size: 2em;
+	font-family: 'Arial Bold', sans-serif;
+	font-weight: bolder;
+	text-transform: uppercase;
+	margin-top: auto;
+}
+
+.logo-area .hashtag {
+	font-size: 4em;
+	font-weight: 700;
+	font-family: 'Arial Black', sans-serif;
+	margin-bottom: auto;
+}
+
+.card-wrapper {
+	width: 47vw;
+}
+
+.card-area {
+	background-color: rgba(255, 255, 255, 0.8);
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+
+/*************
+CARD STYLES
+*************/
+
+ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 15px;
+	height: 100%;
+}
+
+.card {
+	display: flex;
+	flex- direction: row;
+	background: white;
+	margin: 10px 0;
+	padding: 15px;
+}
+
+.card-left {
+	margin-right: 25px;
+}
+
+.card .name {
+	font-size: 1em;
+	font-family: 'Arial', sans-serif;
+	color: #4d4d4d;
+	font-weight: 600;
+	text-transform: uppercase;
+}
+
+.card .date {
+	font-size: 0.9em;
+	color: #787878;
+	text-transform: uppercase;
+}
+
+.card .text {
+	color: #4c4c4c;
+}
+
+.card .media {
+	max-width: 260px;
+}
+
+/*************
+CARD ANIMATION
+*************/
+
+.animate {
+	animation: fade 2s 1;
+	opacity: 1!important;
+}
+
+@keyframes fade {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+
+/*************
+MEDIA QUERIES
+*************/
+
+@media (max-width: 1200px) {
+	body, html {
+		overflow: visible;
+	}
+	.content-wrapper {
+		flex-direction: column;
+	}
+
+	.logo-wrapper, .card-wrapper {
+		width: initial;
+		background: none;
+	}
+
+	.logo-area, .card-area {
+		background: none;
+		height: auto;
+	}
+
+	.logo-area .subtitle {
+		margin-top: none;
+		font-size: 1.2em;
+	}
+
+	.logo-area .hashtag {
+		font-size: 3.2em;
+	}
+}

@@ -127,6 +127,21 @@ CARD ANIMATION
   }
 }
 
+/*************
+INSTAGRAM/TWITTER-SPECIFIC CSS
+*************/
+
+.instagram:after {
+	content: url(../imgs/instagram.png);
+	margin-bottom: auto;
+	margin-left: auto;
+}
+
+.twitter:after {
+	content: url(../imgs/twitter.png);
+	margin-bottom: auto;
+	margin-left: auto;
+}
 
 /*************
 MEDIA QUERIES

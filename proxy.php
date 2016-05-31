@@ -12,12 +12,7 @@ $config = array(
     'oauth_access_token_secret' => 'BPZbAylPzCTAUCod6Q5X1EeTWb4lk848WG0Qc8CQFp3Nr',
     'consumer_key' => '6uddjyVm8vQd931Rsqq8wuBJY',
     'consumer_secret' => 'AhBLFMJroZF4sjpRh5FqQR5CVtUlsraoK9PnsOLTSqSQRc0m8Y',
-    'use_whitelist' => false, // If you want to only allow some requests to use this script.
     'base_url' => 'https://api.twitter.com/1.1/'
-);
-// Only allow certain requests to twitter. Stop randoms using your server as a proxy.
-$whitelist = array(
-    'statuses/user_timeline.json?screen_name=MikeRogers0&count=10&include_rts=false&exclude_replies=true'=>true
 );
 
 /*

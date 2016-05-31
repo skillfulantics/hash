@@ -1,82 +1,141 @@
-jQuery(document).ready(function ($) {
+/****************
+GLOBAL FUNCTIONS
+*****************/
 
-  // change numbers to weekday
-  function weekDay(object) {
-    var d = new Date(object);
-    var weekday = new Array(7);
-    weekday[0]=  "Sunday";
-    weekday[1] = "Monday";
-    weekday[2] = "Tuesday";
-    weekday[3] = "Wednesday";
-    weekday[4] = "Thursday";
-    weekday[5] = "Friday";
-    weekday[6] = "Saturday";
-
-    var n = weekday[d.getDay()];
-    return n;
+// change numbers to weekday
+function weekDay(object) {
+  if (object.match(/[a-z]/i)) {
+    return object;
+  } else {
+    object = object * 1000;
   }
 
-  // change time to 12hr format
-  function formatTime(object) {
-    var d = new Date(object);
-    var hours = d.getHours();
-    var minutes = d.getMinutes();
-    var ampm = hours >= 12 ? 'pm' : 'am';
-    hours = hours % 12;
-    hours = hours ? hours : 12; // the hour '0' should be '12'
-    minutes = minutes < 10 ? '0'+minutes : minutes;
-    var strTime = hours + ':' + minutes + ' ' + ampm;
-    return strTime;
+  var d = new Date(object);
+  var weekday = new Array(7);
+  weekday[0]=  "Sunday";
+  weekday[1] = "Monday";
+  weekday[2] = "Tuesday";
+  weekday[3] = "Wednesday";
+  weekday[4] = "Thursday";
+  weekday[5] = "Friday";
+  weekday[6] = "Saturday";
+
+  var n = weekday[d.getDay()];
+  return n;
+}
+
+// change time to 12hr format
+function formatTime(object) {
+  if (object.match(/[a-z]/i)) {
+    object = object;; 
+  } else {
+    object = object * 1000;
   }
 
-    // ajax call
-  function getTweets(count, max, hashtag) {    
-    // url to be pushed in
-    var url = 'proxy.php?url='+encodeURIComponent('search/tweets.json?q=%23' + hashtag + '&count=' + count + '&result_type=recent'); 
-    $.getJSON(url, function(response, data, jqXHR){
-      console.log(response);
-      $.each(response.statuses, function( i, item ){
-        //check if there's a picture
-        function checkPicture(object) {
-          if (typeof object != 'undefined') {
-            listText += '<img class="media" src = "' + object[0].media_url + '"/></div></li>'
-          } else {
-            return;
-          }
-        }
-        // object variables
-        var tweetID = this.id;
-        var tweetUserPic = this.user.profile_image_url;
-        var tweetText = this.text.split('http')[0].replace(RegExp('#' + hashtag, "gi"), '<strong>#' + hashtag.charAt(0).toUpperCase() + hashtag.slice(1) + '</strong>');
-        var tweetName = this.user.name;
-        var tweetDay = weekDay(this.created_at).substr(0,3);
-        var tweetTime = formatTime(this.created_at);
-        var listText = '<li id="' + tweetID + '" class="card card--' + i + '">';
+  var d = new Date(object);
+  var hours = d.getHours();
+  var minutes = d.getMinutes();
+  var ampm = hours >= 12 ? 'pm' : 'am';
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+  minutes = minutes < 10 ? '0'+minutes : minutes;
+  var strTime = hours + ':' + minutes + ' ' + ampm;
+  return strTime;
+}
 
-        console.log(i);
+//check if there's a picture(twitter only)
+function checkPicture(object, target) {
+  if (typeof object != 'undefined') {
+    target += '<img class="media" src = "' + object[0].media_url + '"/></div></li>'
+  } else {
+    return;
+  }
+}
 
-        listText += '<div class="card-left"><img class="img img--' + i + '" src="' + tweetUserPic.replace("normal", "bigger") + '"/></div>';
-        listText += '<div class="card-right"><div class="card-meta"><span class="name name--' + i + '">' + tweetName + '</span>';
-        listText += '<span class="date date--' + i + '"> ' + tweetDay + ' ' + tweetTime + '</span></div>';
-        listText += '<p class="text text--' + i + '">' + tweetText + '</p>';
-        checkPicture(this.entities.media);
-        
-        if ($('.card').is('#' + tweetID)) {
-          return true;
-        } else if ($('#card-list > *').length === max) {
-          $(listText).css("opacity", "0").prependTo('#card-list').toggleClass('animate');
-          $('#card-list li:last').remove();
-        } else {
-          $('#card-list').prepend(listText);
-        };
-      });
+/****************
+FETCH INSTA/TWITTER POSTS
+*****************/
+
+function getTags(count, max, hashtag) {
+  
+  // access token for instagram
+  var instaToken = '3274259718.1677ed0.c0bdc26b8a48431b9179323afebb29cc';
+  
+  // urls to be pushed in
+  var twitterUrl = 'proxy.php?url='+encodeURIComponent('search/tweets.json?q=%23' + hashtag + '&count=' + count + '&result_type=recent');
+  var instaUrl = 'https://api.instagram.com/v1/tags/' + hashtag + '/media/recent?&access_token=' + instaToken + '&count=' + count + '&callback=?';
+  
+  // twitter call    
+  $.getJSON(twitterUrl, function(response, data){
+    //console.log(response);
+    $.each(response.statuses, function( i, item ){
+      // object variables
+      var tweetID = this.id;
+      var tweetUserPic = this.user.profile_image_url;
+      var tweetText = this.text.split('http')[0].replace(RegExp('#' + hashtag, "gi"), '<strong>#' + hashtag.charAt(0).toUpperCase() + hashtag.slice(1) + '</strong>');
+      var tweetName = this.user.name;
+      var tweetDay = weekDay(this.created_at).substr(0,3);
+      var tweetTime = formatTime(this.created_at);
+      var listText = '<li id="' + tweetID + '" class="twitter card card--' + i + '">';
+
+      listText += '<div class="card-left"><img class="img img--' + i + '" src="' + tweetUserPic.replace("normal", "bigger") + '"/></div>';
+      listText += '<div class="card-right"><div class="card-meta"><span class="name name--' + i + '">' + tweetName + '</span>';
+      listText += '<span class="date date--' + i + '"> ' + tweetDay + ' ' + tweetTime + '</span></div>';
+      listText += '<p class="text text--' + i + '">' + tweetText + '</p>';
+      checkPicture(this.entities.media, listText);
+      
+      if ($('.card').is('#' + tweetID)) {
+        return true;
+      } else if ($('#card-list > *').length === max) {
+        $(listText).css("opacity", "0").prependTo('#card-list').toggleClass('animate');
+        $('#card-list li:last').remove();
+      } else {
+        $('#card-list').prepend(listText);
+      };
     });
-  }
+  });
 
-  getTweets(6, 6, 'trump');
+  //instagram call
+  $.getJSON(instaUrl, function(response, data){
+    console.log(response);
+    $.each(response.data, function( i, item ){
+      // object variables
+      console.log(i);
+      var instaID = this.id;
+      var instaUserPic = this.user.profile_picture;
+      var instaText = this.caption.text.replace(RegExp('#' + hashtag, "gi"), '<strong>#' + hashtag.charAt(0).toUpperCase() + hashtag.slice(1) + '</strong>');
+      var instaName = this.user.username;
+      var instaDay = weekDay(this.caption.created_time).substr(0,3);
+      var instaTime = formatTime(this.caption.created_time);
+      var instaPic = this.images.standard_resolution.url;
+      var listText = '<li id="' + instaID + '" class="instagram card card--' + i + '">';
 
-  setInterval(function(){
-    getTweets(1, 6, 'trump');
-  }, 6000);
+      listText += '<div class="card-left"><img class="img width="73" height="73" img--' + i + '" src="' + instaUserPic + '"/></div>';
+      listText += '<div class="card-right"><div class="card-meta"><span class="name name--' + i + '">' + instaName + '</span>';
+      listText += '<span class="date date--' + i + '"> ' + instaDay + ' ' + instaTime + '</span></div>';
+      listText += '<p class="text text--' + i + '">' + instaText + '</p>';
+      listText += '<img class="media" src = "' + instaPic + '"/></div></li>';
+      
+      if ($('.card').is('#' + instaID)) {
+        return true;
+      } else if ($('#card-list > *').length === max) {
+        $(listText).css("opacity", "0").prependTo('#card-list').toggleClass('animate');
+        $('#card-list li:last').remove();
+      } else {
+        $('#card-list').prepend(listText);
+      };
+    });
+  });
+}
 
-});
+/****************
+we are go for launch, cap'n
+*****************/
+
+// pushing the big red button
+getTags(6, 6, 'trump');
+
+// repeatedly pushing the big red button
+setInterval(function(){
+  getTags(1, 6, 'trump');
+}, 6000);

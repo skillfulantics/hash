@@ -59,7 +59,7 @@ FETCH INSTA/TWITTER POSTS
 function getTags(count, max, hashtag) {
   
   // access token for instagram
-  var instaToken = '3274259718.1677ed0.c0bdc26b8a48431b9179323afebb29cc';
+  var instaToken = '3274259718.520c083.a5e03fb27e50489ca733d7b19dbb90bb';
   
   // urls to be pushed in
   var twitterUrl = 'proxy.php?url='+encodeURIComponent('search/tweets.json?q=%23' + hashtag + '&count=' + count + '&result_type=recent');
@@ -67,7 +67,7 @@ function getTags(count, max, hashtag) {
   
   // twitter call    
   $.getJSON(twitterUrl, function(response, data){
-    //console.log(response);
+    console.log(response);
     $.each(response.statuses, function( i, item ){
       // object variables
       var tweetID = this.id;
@@ -96,36 +96,35 @@ function getTags(count, max, hashtag) {
   });
 
   //instagram call
-  $.getJSON(instaUrl, function(response, data){
-    console.log(response);
-    $.each(response.data, function( i, item ){
-      // object variables
-      console.log(i);
-      var instaID = this.id;
-      var instaUserPic = this.user.profile_picture;
-      var instaText = this.caption.text.replace(RegExp('#' + hashtag, "gi"), '<strong>#' + hashtag.charAt(0).toUpperCase() + hashtag.slice(1) + '</strong>');
-      var instaName = this.user.username;
-      var instaDay = weekDay(this.caption.created_time).substr(0,3);
-      var instaTime = formatTime(this.caption.created_time);
-      var instaPic = this.images.standard_resolution.url;
-      var listText = '<li id="' + instaID + '" class="instagram card card--' + i + '">';
+  // $.getJSON(instaUrl, function(response, data){
+  //   console.log(response);
+  //   $.each(response.data, function( i, item ){
+  //     // object variables
+  //     var instaID = this.id;
+  //     var instaUserPic = this.user.profile_picture;
+  //     var instaText = this.caption.text.replace(RegExp('#' + hashtag, "gi"), '<strong>#' + hashtag.charAt(0).toUpperCase() + hashtag.slice(1) + '</strong>');
+  //     var instaName = this.user.username;
+  //     var instaDay = weekDay(this.caption.created_time).substr(0,3);
+  //     var instaTime = formatTime(this.caption.created_time);
+  //     var instaPic = this.images.standard_resolution.url;
+  //     var listText = '<li id="' + instaID + '" class="instagram card card--' + i + '">';
 
-      listText += '<div class="card-left"><img class="img width="73" height="73" img--' + i + '" src="' + instaUserPic + '"/></div>';
-      listText += '<div class="card-right"><div class="card-meta"><span class="name name--' + i + '">' + instaName + '</span>';
-      listText += '<span class="date date--' + i + '"> ' + instaDay + ' ' + instaTime + '</span></div>';
-      listText += '<p class="text text--' + i + '">' + instaText + '</p>';
-      listText += '<img class="media" src = "' + instaPic + '"/></div></li>';
+  //     listText += '<div class="card-left"><img class="img width="73" height="73" img--' + i + '" src="' + instaUserPic + '"/></div>';
+  //     listText += '<div class="card-right"><div class="card-meta"><span class="name name--' + i + '">' + instaName + '</span>';
+  //     listText += '<span class="date date--' + i + '"> ' + instaDay + ' ' + instaTime + '</span></div>';
+  //     listText += '<p class="text text--' + i + '">' + instaText + '</p>';
+  //     listText += '<img class="media" src = "' + instaPic + '"/></div></li>';
       
-      if ($('.card').is('#' + instaID)) {
-        return true;
-      } else if ($('#card-list > *').length === max) {
-        $(listText).css("opacity", "0").prependTo('#card-list').toggleClass('animate');
-        $('#card-list li:last').remove();
-      } else {
-        $('#card-list').prepend(listText);
-      };
-    });
-  });
+  //     if ($('.card').is('#' + instaID)) {
+  //       return true;
+  //     } else if ($('#card-list > *').length === max) {
+  //       $(listText).css("opacity", "0").prependTo('#card-list').toggleClass('animate');
+  //       $('#card-list li:last').remove();
+  //     } else {
+  //       $('#card-list').prepend(listText);
+  //     };
+  //   });
+  // });
 }
 
 /****************
@@ -138,4 +137,4 @@ getTags(6, 6, 'trump');
 // repeatedly pushing the big red button
 setInterval(function(){
   getTags(1, 6, 'trump');
-}, 6000);
+}, 15000);

@@ -43,21 +43,12 @@ function formatTime(object) {
   return strTime;
 }
 
-//check if there's a picture(twitter only)
-function checkPicture(object, target) {
-  if (typeof object != 'undefined') {
-    target += '<img class="media" src = "' + object[0].media_url + '"/></div></li>'
-  } else {
-    return;
-  }
-}
-
 /****************
 FETCH INSTA/TWITTER POSTS
 *****************/
 
 function getTags(count, max, hashtag) {
-  
+
   // access token for instagram
   var instaToken = '3274259718.520c083.a5e03fb27e50489ca733d7b19dbb90bb';
   
@@ -82,15 +73,20 @@ function getTags(count, max, hashtag) {
       listText += '<div class="card-right"><div class="card-meta"><span class="name name--' + i + '">' + tweetName + '</span>';
       listText += '<span class="date date--' + i + '"> ' + tweetDay + ' ' + tweetTime + '</span></div>';
       listText += '<p class="text text--' + i + '">' + tweetText + '</p>';
-      checkPicture(this.entities.media, listText);
-      
+
+      if (typeof this.entities.media != 'undefined') {
+        listText += '<img class="media" src = "' + this.entities.media[0].media_url + '"/></div></li>';
+      } else {
+        listText += '</div></li>';
+      }
+
       if ($('.card').is('#' + tweetID)) {
         return true;
       } else if ($('#card-list > *').length === max) {
         $(listText).css("opacity", "0").prependTo('#card-list').toggleClass('animate');
         $('#card-list li:last').remove();
       } else {
-        $('#card-list').prepend(listText);
+        $('#card-list').append(listText);
       };
     });
   });
@@ -132,9 +128,9 @@ we are go for launch, cap'n
 *****************/
 
 // pushing the big red button
-getTags(6, 6, 'trump');
+getTags(6, 6, 'dropyourexcuse');
 
 // repeatedly pushing the big red button
 setInterval(function(){
-  getTags(1, 6, 'trump');
-}, 15000);
+  getTags(1, 6, 'dropyourexcuse');
+}, 6000);

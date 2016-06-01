@@ -121,7 +121,8 @@ ul {
 }
 
 .card .media {
-	max-width: 260px;
+    max-width: 400px;
+    max-height: 400px;
 }
 
 /*************
